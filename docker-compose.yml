@@ -148,10 +148,10 @@ services:
       - frontend
       - api-gateway
     restart: always
-    volumes:
-      - nginx_cache:/var/cache/nginx
+
+# Note: Removed nginx_cache volume to avoid permission issues in AWS environments.
+# Nginx will serve images directly without persistent disk caching.
 
 volumes:
   mysql_data:
   redis_data:
-  nginx_cache:
