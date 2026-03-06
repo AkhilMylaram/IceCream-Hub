@@ -77,7 +77,8 @@ public class AuthService {
             .orElseGet(() -> {
                 log.info("User not found, auto-registering: {}", req.email());
                 String defaultName = req.email().split("@")[0];
-                RegisterRequest regReq = new RegisterRequest(defaultName, req.email(), req.password(), "Default Address");
+                // RegisterRequest field order: (email, password, name, address)
+                RegisterRequest regReq = new RegisterRequest(req.email(), req.password(), defaultName, "Default Address");
                 return register(regReq);
             });
     }
@@ -90,7 +91,8 @@ public class AuthService {
         session.setExpiresAt(LocalDateTime.now().plusHours(24));
         sessionRepository.save(session);
         log.info("Created session for user: {}", user.getId());
-        return new AuthResponse(token, user.getId(), user.getName());
+        // Include email in response so the frontend can display it in the profile dropdown
+        return new AuthResponse(token, user.getId(), user.getName(), user.getEmail());
     }
 
     @Transactional
