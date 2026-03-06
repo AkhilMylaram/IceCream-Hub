@@ -49,15 +49,12 @@ export default function AuthPage() {
         data = await registerUser(formData);
       }
 
-      if (data.token) {
-        localStorage.setItem('user', JSON.stringify(data));
-        window.dispatchEvent(new Event('auth-change'));
-        router.push('/products');
-      } else {
-        setError(data.message || 'Authentication failed');
-      }
-    } catch (err) {
-      setError('An error occurred. Please try again.');
+      // loginUser/registerUser now throw on error, so if we reach here it succeeded
+      localStorage.setItem('user', JSON.stringify(data));
+      window.dispatchEvent(new Event('auth-change'));
+      router.push('/products');
+    } catch (err: any) {
+      setError(err?.message || 'Authentication failed. Please try again.');
     } finally {
       setLoading(false);
     }

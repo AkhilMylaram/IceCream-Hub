@@ -122,18 +122,36 @@ services:
   frontend:
     build: ./frontend
     container_name: icecream-frontend
-    ports:
-      - "3000:3000"
+    # Port 3000 is intentionally NOT published to the host.
+    # All external access to the frontend goes through the NGINX reverse proxy on port 80.
+    expose:
+      - "3000"
     environment:
-      - AUTH_SERVICE_URL=http://api-gateway:8080
-      - PRODUCT_SERVICE_URL=http://api-gateway:8080
-      - ORDER_SERVICE_URL=http://api-gateway:8080
-      - CART_SERVICE_URL=http://api-gateway:8080
-      - RECOMMENDATION_SERVICE_URL=http://api-gateway:8080
+      - GATEWAY_URL=http://api-gateway:8080
     depends_on:
       - api-gateway
     restart: always
 
+  # ── NGINX Reverse Proxy ──────────────────────────────────────────────────────
+  # Entry point for ALL user-facing traffic on port 80.
+  # Routes:
+  #   /api/*            → api-gateway:8080   (microservices REST)
+  #   /_next/static/*   → frontend:3000      (cached static JS/CSS chunks)
+  #   /images/*         → frontend:3000      (cached AI-generated images)
+  #   /                 → frontend:3000      (Next.js SSR pages)
+  nginx:
+    build: ./nginx
+    container_name: icecream-nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - api-gateway
+    restart: always
+    volumes:
+      - nginx_cache:/var/cache/nginx
+
 volumes:
   mysql_data:
   redis_data:
+  nginx_cache:

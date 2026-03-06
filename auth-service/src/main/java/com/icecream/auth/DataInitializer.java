@@ -25,18 +25,19 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("Checking for default admin user...");
-        if (userRepository.findByEmail("admin").isEmpty()) {
+        if (userRepository.findByEmail("admin@gmail.com").isEmpty()) {
             log.info("Admin user not found. Initializing default admin user.");
+            // RegisterRequest record order: (email, password, name, address)
             RegisterRequest adminReq = new RegisterRequest(
+                "admin@gmail.com",
+                "admin",
                 "Admin User",
-                "admin",
-                "admin",
                 "Headquarters"
             );
             authService.register(adminReq);
-            log.info("Default admin user created successfully.");
+            log.info("Default admin user 'admin@gmail.com' created successfully.");
         } else {
-            log.info("Admin user already exists.");
+            log.info("Admin user 'admin@gmail.com' already exists. Skipping seed.");
         }
     }
 }
