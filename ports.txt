@@ -1,0 +1,96 @@
+==============================================================
+              ICECREAM HUB — SERVICE PORT MAP
+==============================================================
+Last Updated: 2026-03-06
+
+--------------------------------------------------------------
+  APPLICATION SERVICES
+--------------------------------------------------------------
+
+  SERVICE                  CONTAINER NAME          HOST PORT    CONTAINER PORT    TECHNOLOGY
+  -----------------------  ----------------------  ----------   ---------------   -----------------
+  API Gateway              icecream-gateway        8080    -->  8080              Spring Cloud Gateway
+  Frontend (Next.js)       icecream-frontend       3000    -->  3000              Node.js 20
+  Auth Service             icecream-auth           8081    -->  8081              Spring Boot / Java 17
+  Product Service          icecream-product        8082    -->  8082              Spring Boot / Java 17
+  Order Service            icecream-order          8083    -->  8083              Spring Boot / Java 17
+  Cart Service             icecream-cart           8084    -->  8084              FastAPI / Python 3.10
+  Recommendation Service   icecream-recommendation 8085    -->  8085              FastAPI / Python 3.10
+
+--------------------------------------------------------------
+  INFRASTRUCTURE SERVICES
+--------------------------------------------------------------
+
+  SERVICE                  CONTAINER NAME          HOST PORT    CONTAINER PORT    TECHNOLOGY
+  -----------------------  ----------------------  ----------   ---------------   -----------------
+  MySQL Database           icecream-mysql          3306    -->  3306              MySQL 8.0
+  Redis Cache              icecream-redis          6379    -->  6379              Redis 7 (Alpine)
+
+--------------------------------------------------------------
+  HOW TO ACCESS THE LIVE APPLICATION
+--------------------------------------------------------------
+
+  Open your browser and go to:
+    http://localhost:3000
+
+--------------------------------------------------------------
+  CENTRALIZED API ACCESS (via Gateway)
+--------------------------------------------------------------
+
+  Base URL: http://localhost:8080/api
+
+  Auth API:             http://localhost:8080/api/auth/...
+  Product API:          http://localhost:8080/api/products/...
+  Order API:            http://localhost:8080/api/orders/...
+  Cart API:             http://localhost:8080/api/cart/...
+  Recommendation API:   http://localhost:8080/api/recommendations/...
+
+  *Direct service access (ports 8081-8085) is still available for debugging.*
+
+--------------------------------------------------------------
+  HEALTH & METRICS
+--------------------------------------------------------------
+
+  Spring Boot services (8081-8083):
+    http://localhost:808x/actuator/health
+    http://localhost:808x/actuator/prometheus
+
+  Python services (8084-8085):
+    http://localhost:808x/metrics
+
+--------------------------------------------------------------
+  DATABASE SCHEMAS
+--------------------------------------------------------------
+
+  MySQL (localhost:3306)
+    auth_db             → used by auth-service
+    product_db          → used by product-service
+    order_db            → used by order-service
+    recommendation_db   → used by recommendation-service
+
+  MySQL Credentials:
+    User:     icecream_user
+    Password: icecream_password
+    Root PW:  rootpassword
+
+  Redis (localhost:6379)
+    DB 0                → used by cart-service
+
+--------------------------------------------------------------
+  DOCKER COMPOSE COMMANDS
+--------------------------------------------------------------
+
+  Start all services:
+    docker-compose up --build -d
+
+  Stop all services:
+    docker-compose down
+
+  View running containers:
+    docker ps
+
+  Stream logs from a service:
+    docker-compose logs -f api-gateway
+    docker-compose logs -f frontend
+
+==============================================================

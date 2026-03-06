@@ -1,0 +1,134 @@
+==============================================================
+         ICECREAM HUB — DEPLOYMENT SUMMARY & STATUS
+==============================================================
+Last Updated: 2026-03-06T15:37:45+05:30
+
+==============================================================
+ APPLICATION IS LIVE
+==============================================================
+
+  Open in browser: http://localhost:3000
+
+==============================================================
+ ALL 8 CONTAINERS RUNNING
+==============================================================
+
+  Container                Status      Port(s)
+  -----------------------  ----------  -----------------------
+  icecream-frontend        ✅ Up       0.0.0.0:3000->3000/tcp   ← Web App
+  icecream-product         ✅ Up       0.0.0.0:8082->8082/tcp
+  icecream-auth            ✅ Up       0.0.0.0:8081->8081/tcp
+  icecream-order           ✅ Up       0.0.0.0:8083->8083/tcp
+  icecream-cart            ✅ Up       0.0.0.0:8084->8084/tcp
+  icecream-recommendation  ✅ Up       0.0.0.0:8085->8085/tcp
+  icecream-mysql           ✅ Up       0.0.0.0:3306->3306/tcp
+  icecream-redis           ✅ Up       0.0.0.0:6379->6379/tcp
+
+==============================================================
+ 3 PRODUCTS SEEDED WITH HD AI IMAGES
+==============================================================
+
+  The product API is returning all 3 new items with local image
+  paths confirmed via:
+    Invoke-RestMethod -Uri "http://localhost:8082/api/products"
+
+  Name               Flavor      Price   Image Path
+  -----------------  ----------  ------  ------------------------------------------
+  Vanilla Dream      Vanilla     $4.99   /images/vanilla_ice_cream_*.png
+  Double Chocolate   Chocolate   $5.49   /images/chocolate_ice_cream_*.png
+  Strawberry Fields  Strawberry  $4.99   /images/strawberry_ice_cream_*.png
+
+==============================================================
+ WHAT WAS DONE — FULL CHANGE LOG
+==============================================================
+
+1.  AI IMAGES — Generated 3 full HD, photo-realistic ice cream images
+    and placed them in frontend/public/images/
+
+2.  DOCKERFILES — Created production-grade multi-stage Dockerfiles
+    for all 5 services:
+      - auth-service     → Eclipse Temurin JDK + Gradle wrapper build
+      - product-service  → Eclipse Temurin JDK + Gradle wrapper build
+      - order-service    → Eclipse Temurin JDK + Gradle wrapper build
+      - cart-service     → python:3.10-slim + uvicorn
+      - recommendation-service → python:3.10-slim + uvicorn
+      - frontend         → node:20-alpine + Next.js production build
+
+3.  DOCKER-COMPOSE.YML — Fully updated with:
+      - All 8 services (6 app + 2 infra)
+      - Environment variables pointing services to internal compose DNS
+      - Persistent MySQL and Redis volumes
+      - depends_on ordering for startup safety
+
+4.  LIVE DATA — Seeded 3 ice cream products via REST API:
+      POST http://localhost:8082/api/products
+
+5.  BUG FIXES APPLIED:
+      - Hibernate dialect: MySQL8Dialect → MySQLDialect (Spring Boot compatibility)
+      - Gradle: Replaced global gradle:8.5 image with local gradlew wrapper
+        to match project's Gradle 9.3.1 requirements
+      - ESLint: Escaped unescaped entity in cart page (haven't → haven&apos;t)
+      - Node modules: Added frontend/.dockerignore (node_modules, .next, .git)
+        to prevent Docker symlink conflict with acorn binary
+      - Next.js Font: Removed Google Font network request (next/font/google)
+        which caused Webpack timeout errors during Docker build
+      - Python services: Updated hardcoded 'localhost' to use REDIS_HOST / DATABASE_URL
+        environment variables for container-to-container networking
+
+==============================================================
+ ARCHITECTURE SUMMARY
+==============================================================
+
+  ┌────────────┐
+  │  Browser   │
+  └─────┬──────┘
+        │ http://localhost:3000
+  ┌─────▼──────────────────┐
+  │  Next.js Frontend       │
+  │     (port 3000)         │
+  └──────┬──────────────────┘
+         │ REST calls to each service
+  ┌──────┼──────────┬──────────────┬──────────────────┐
+  ▼      ▼          ▼              ▼                  ▼
+auth  product    cart (Redis)   order           recommendation
+8081   8082         8084          8083               8085
+  │      │                         │                   │
+MySQL  MySQL                     MySQL               MySQL
+auth_db product_db              order_db       recommendation_db
+
+==============================================================
+ HOW EACH SERVICE IS INDEPENDENT / DEPENDENT
+==============================================================
+
+  auth-service:
+    → INDEPENDENT. Owns auth_db. No calls to other services.
+
+  product-service:
+    → INDEPENDENT. Owns product_db. Referenced by other services
+      but makes no outbound service calls.
+
+  cart-service:
+    → INDEPENDENT. Uses Redis only. No MySQL, no inter-service calls.
+
+  order-service:
+    → DEPENDS ON product-service (Feign client) to validate items.
+    → Owns order_db.
+
+  recommendation-service:
+    → DEPENDS ON MySQL (recommendation_db) to track product stats.
+    → No direct runtime dependency on other running services.
+
+  frontend:
+    → DEPENDS ON all backend services at runtime via REST API.
+
+==============================================================
+ DOCKER COMMANDS REFERENCE
+==============================================================
+
+  Start:          docker-compose up --build -d
+  Stop:           docker-compose down
+  Wipe data:      docker-compose down -v
+  View logs:      docker-compose logs -f [service-name]
+  List running:   docker ps
+
+==============================================================

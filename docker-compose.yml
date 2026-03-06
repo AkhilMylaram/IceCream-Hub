@@ -1,0 +1,139 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: icecream-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_USER: icecream_user
+      MYSQL_PASSWORD: icecream_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init-scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "icecream_user", "-picecream_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  redis:
+    image: redis:7-alpine
+    container_name: icecream-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  auth-service:
+    build: ./auth-service
+    container_name: icecream-auth
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/auth_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=icecream_user
+      - SPRING_DATASOURCE_PASSWORD=icecream_password
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: always
+
+  product-service:
+    build: ./product-service
+    container_name: icecream-product
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/product_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=icecream_user
+      - SPRING_DATASOURCE_PASSWORD=icecream_password
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: always
+
+  order-service:
+    build: ./order-service
+    container_name: icecream-order
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/order_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=icecream_user
+      - SPRING_DATASOURCE_PASSWORD=icecream_password
+      - CART_SERVICE_URL=http://cart-service:8084
+      - PRODUCT_SERVICE_URL=http://product-service:8082
+    depends_on:
+      mysql:
+        condition: service_healthy
+      cart-service:
+        condition: service_started
+      product-service:
+        condition: service_started
+    restart: always
+
+  cart-service:
+    build: ./cart-service
+    container_name: icecream-cart
+    ports:
+      - "8084:8084"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: always
+
+  recommendation-service:
+    build: ./recommendation-service
+    container_name: icecream-recommendation
+    ports:
+      - "8085:8085"
+    environment:
+      - DATABASE_URL=mysql+pymysql://icecream_user:icecream_password@mysql:3306/recommendation_db
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: always
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: icecream-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - auth-service
+      - product-service
+      - order-service
+      - cart-service
+      - recommendation-service
+    restart: always
+
+  frontend:
+    build: ./frontend
+    container_name: icecream-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - AUTH_SERVICE_URL=http://api-gateway:8080
+      - PRODUCT_SERVICE_URL=http://api-gateway:8080
+      - ORDER_SERVICE_URL=http://api-gateway:8080
+      - CART_SERVICE_URL=http://api-gateway:8080
+      - RECOMMENDATION_SERVICE_URL=http://api-gateway:8080
+    depends_on:
+      - api-gateway
+    restart: always
+
+volumes:
+  mysql_data:
+  redis_data:
