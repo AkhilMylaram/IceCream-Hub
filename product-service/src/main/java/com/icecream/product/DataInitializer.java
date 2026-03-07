@@ -27,34 +27,38 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        log.info("Checking for default catalog data...");
+        log.info("Checking for default catalog data (Product count: {})...", productRepository.count());
         if (productRepository.count() == 0) {
-            log.info("Catalog is empty. Initializing default products.");
+            log.info("Catalog is empty. Initializing default premium products for AWS environment.");
             
-            Category premium = new Category();
-            premium.setName("Premium");
-            premium.setDescription("Our most luxurious and stunning ice cream flavors.");
-            premium = categoryRepository.save(premium);
-            
-            Category finalPremium = premium;
-            
-            List<Product> products = Arrays.asList(
-                createProduct("Salted Caramel Glow", "Rich caramel with sea salt crystals.", "Caramel", 5.99, "/images/salted_caramel.png", finalPremium),
-                createProduct("Midnight Brownie", "Dark chocolate with chewy brownie pieces.", "Chocolate", 6.49, "/images/midnight_chocolate.png", finalPremium),
-                createProduct("Pistachio Dream", "Premium roasted pistachios in creamy base.", "Pistachio", 6.99, "/images/pistachio.png", finalPremium),
-                createProduct("Strawberry Velvet", "Fresh strawberries with velvet cake chunks.", "Strawberry", 5.49, "/images/strawberry_shortcake.png", finalPremium),
-                createProduct("Espresso Gold", "Double-shot espresso infused cream.", "Coffee", 5.99, "/images/espresso.png", finalPremium),
-                createProduct("Coconut Bliss", "Tropical coconut milk and shredded coconut.", "Coconut", 5.49, "/images/coconut.png", finalPremium),
-                createProduct("Oreo Chunk", "Classic cookies and cream with extra chunks.", "Cookies & Cream", 5.99, "/images/cookies_cream.png", finalPremium),
-                createProduct("Mango Tango", "Zesty alfonso mango sorbet.", "Mango", 4.99, "/images/mango.png", finalPremium),
-                createProduct("Cool Mint Flake", "Refreshing mint with dark chocolate curls.", "Mint", 5.49, "/images/mint.png", finalPremium),
-                createProduct("Honey Lavender", "Artisanal honey with organic lavender notes.", "Lavender", 6.49, "/images/honey_lavender.png", finalPremium)
-            );
-            
-            productRepository.saveAll(products);
-            log.info("Successfully seeded 10 artisanal products.");
+            try {
+                Category premium = new Category();
+                premium.setName("Premium");
+                premium.setDescription("Our most luxurious and stunning ice cream flavors.");
+                premium = categoryRepository.save(premium);
+                
+                final Category finalPremium = premium;
+                
+                List<Product> items = Arrays.asList(
+                    createProduct("Salted Caramel Glow", "Rich artisanal caramel with Mediterranean sea salt crystals.", "Caramel", 5.99, "/images/salted_caramel.png", finalPremium),
+                    createProduct("Midnight Brownie", "Intense dark chocolate with chewy fudge brownie pieces.", "Chocolate", 6.49, "/images/midnight_chocolate.png", finalPremium),
+                    createProduct("Pistachio Dream", "Premium roasted Sicilian pistachios in a silky cream base.", "Pistachio", 6.99, "/images/pistachio.png", finalPremium),
+                    createProduct("Strawberry Velvet", "Fresh heritage strawberries with organic velvet cake chunks.", "Strawberry", 5.49, "/images/strawberry_shortcake.png", finalPremium),
+                    createProduct("Espresso Gold", "Smooth double-shot espresso infused with Madagascar vanilla.", "Coffee", 5.99, "/images/espresso.png", finalPremium),
+                    createProduct("Coconut Bliss", "Tropical organic coconut milk with toasted coconut shreds.", "Coconut", 5.49, "/images/coconut.png", finalPremium),
+                    createProduct("Oreo Chunk", "Classic cookies and cream featuring hand-broken artisanal wafers.", "Cookies & Cream", 5.99, "/images/cookies_cream.png", finalPremium),
+                    createProduct("Mango Tango", "Zesty sun-ripened Alfonso mango sorbet.", "Mango", 4.99, "/images/mango.png", finalPremium),
+                    createProduct("Cool Mint Flake", "Refreshing garden mint with 70% dark chocolate curls.", "Mint", 5.49, "/images/mint.png", finalPremium),
+                    createProduct("Honey Lavender", "Wildflower honey paired with organic Provencal lavender.", "Lavender", 6.49, "/images/honey_lavender.png", finalPremium)
+                );
+                
+                productRepository.saveAll(items);
+                log.info("Successfully seeded {} products into the catalog.", items.size());
+            } catch (Exception e) {
+                log.error("Failed to seed product data: {}", e.getMessage(), e);
+            }
         } else {
-            log.info("Catalog already contains data. Skipping seed.");
+            log.info("Catalog already contains {} products. Skipping initialization.", productRepository.count());
         }
     }
 
