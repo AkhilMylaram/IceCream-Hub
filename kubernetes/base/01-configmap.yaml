@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: icecream-config
+  namespace: icecream-hub
+data:
+  # Base URLs
+  SPRING_DATASOURCE_URL_AUTH: "jdbc:mysql://mysql:3306/auth_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
+  SPRING_DATASOURCE_URL_PRODUCT: "jdbc:mysql://mysql:3306/product_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
+  SPRING_DATASOURCE_URL_ORDER: "jdbc:mysql://mysql:3306/order_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
+  DATABASE_URL_RECOMMENDATION: "mysql+pymysql://icecream_user:icecream_password@mysql:3306/recommendation_db"
+
+  SPRING_DATASOURCE_USERNAME: "icecream_user"
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  
+  # Microservices Internal DNS URLs
+  CART_SERVICE_URL: "http://cart-service:8084"
+  PRODUCT_SERVICE_URL: "http://product-service:8082"
+  GATEWAY_URL: "http://api-gateway:8080"
+  
+  # JVM Tuning
+  JAVA_TOOL_OPTIONS: "-Xmx256m -Xms128m"
