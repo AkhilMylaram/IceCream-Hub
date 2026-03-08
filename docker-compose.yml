@@ -13,7 +13,7 @@ services:
       - ./init-scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "icecream_user", "-picecream_password"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -42,6 +42,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/auth_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=icecream_user
       - SPRING_DATASOURCE_PASSWORD=icecream_password
+      - JAVA_TOOL_OPTIONS=-Xmx256m -Xms128m
     depends_on:
       mysql:
         condition: service_healthy
@@ -56,6 +57,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/product_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=icecream_user
       - SPRING_DATASOURCE_PASSWORD=icecream_password
+      - JAVA_TOOL_OPTIONS=-Xmx256m -Xms128m
     depends_on:
       mysql:
         condition: service_healthy
@@ -72,6 +74,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=icecream_password
       - CART_SERVICE_URL=http://cart-service:8084
       - PRODUCT_SERVICE_URL=http://product-service:8082
+      - JAVA_TOOL_OPTIONS=-Xmx256m -Xms128m
     depends_on:
       mysql:
         condition: service_healthy
@@ -111,6 +114,8 @@ services:
     container_name: icecream-gateway
     ports:
       - "8080:8080"
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xmx256m -Xms128m
     depends_on:
       - auth-service
       - product-service
