@@ -124,21 +124,6 @@ export default function Home() {
         <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-pink-600/10 blur-[150px] rounded-full mix-blend-screen" />
       </div>
 
-      {/* HEADER NAV */}
-      <motion.nav 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0.5 }}
-        className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 py-6 backdrop-blur-md border-b border-white/5"
-      >
-        <div className="text-xl font-black tracking-tighter mix-blend-difference z-50">
-          IceCream<span className="text-pink-500">Hub</span>
-        </div>
-        <Link href="/auth" className="text-sm font-semibold tracking-widest uppercase hover:text-pink-400 transition-colors z-50">
-          Sign In
-        </Link>
-      </motion.nav>
-
       {/* SECTION 1: HYPER-CINEMATIC HERO */}
       <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
         {/* Parallax Background */}
@@ -166,8 +151,8 @@ export default function Home() {
                 The New Standard of Dessert
                 </motion.div>
                 
-                <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.85] text-white drop-shadow-2xl">
-                Taste <br />
+                <h1 className="text-5xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.85] text-white drop-shadow-2xl">
+                Taste <br className="hidden sm:block" />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 pr-2 pb-4 inline-block drop-shadow-[0_0_30px_rgba(236,72,153,0.5)]">
                     The Future.
                 </span>
@@ -216,11 +201,11 @@ export default function Home() {
           className="flex flex-col md:flex-row justify-between items-end mb-12 gap-8"
         >
           <div>
-            <div className="flex items-center gap-2 text-pink-500 font-bold tracking-widest uppercase text-sm mb-4">
-              <span className="h-[2px] w-12 bg-pink-500 inline-block"></span>
+            <div className="flex items-center gap-2 text-pink-500 font-bold tracking-widest uppercase text-xs sm:text-sm mb-4">
+              <span className="h-[2px] w-8 sm:w-12 bg-pink-500 inline-block"></span>
               The Collection
             </div>
-            <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter">Iconic Flavors</h2>
+            <h2 className="text-4xl md:text-7xl font-black text-white tracking-tighter">Iconic Flavors</h2>
           </div>
           <p className="text-xl text-gray-400 max-w-md font-light">
             Meticulously engineered blends to transcend mere taste and evoke pure ecstasy.
@@ -294,7 +279,7 @@ export default function Home() {
               <div className="flex items-center gap-2 text-purple-400 font-bold tracking-widest text-sm uppercase mb-6">
                 <ShieldCheck className="w-5 h-5" /> Masterclass Craftsmanship
               </div>
-              <h2 className="text-5xl md:text-7xl font-black text-white leading-[1.1] tracking-tighter">
+              <h2 className="text-4xl md:text-7xl font-black text-white leading-[1.1] tracking-tighter">
                 Perfection is <br/>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-gray-600">Our Baseline.</span>
               </h2>
