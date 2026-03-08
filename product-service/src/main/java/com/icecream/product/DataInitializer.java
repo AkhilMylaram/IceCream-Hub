@@ -34,7 +34,6 @@ public class DataInitializer implements CommandLineRunner {
             try {
                 Category premium = new Category();
                 premium.setName("Premium");
-                premium.setDescription("Our most luxurious and stunning ice cream flavors.");
                 premium = categoryRepository.save(premium);
                 
                 final Category finalPremium = premium;
