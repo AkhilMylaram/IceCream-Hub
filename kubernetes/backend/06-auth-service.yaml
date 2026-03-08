@@ -24,6 +24,16 @@ spec:
       labels:
         app: auth-service
     spec:
+      initContainers:
+        - name: wait-for-mysql
+          image: mysql:8.0
+          env:
+            - name: MYSQL_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: icecream-secret
+                  key: MYSQL_PASSWORD
+          command: ['sh', '-c', 'until mysql -h mysql -u icecream_user -e "SELECT 1"; do sleep 2; done']
       containers:
         - name: auth-service
           # Image needs to be substituted with real registry path in production
@@ -31,6 +41,24 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8081
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8081
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8081
+            initialDelaySeconds: 20
+            periodSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8081
+            failureThreshold: 30
+            periodSeconds: 10
           env:
             - name: SPRING_DATASOURCE_URL
               valueFrom:
