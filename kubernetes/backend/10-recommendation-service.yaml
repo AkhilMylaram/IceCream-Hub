@@ -26,8 +26,8 @@ spec:
     spec:
       containers:
         - name: recommendation-service
-          image: icecream-recommendation:latest
-          imagePullPolicy: IfNotPresent
+          image: akhilmylaram/icecream-recommendation:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8085
           env:

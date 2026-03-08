@@ -26,8 +26,8 @@ spec:
     spec:
       containers:
         - name: cart-service
-          image: icecream-cart:latest
-          imagePullPolicy: IfNotPresent
+          image: akhilmylaram/icecream-cart:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8084
           env:

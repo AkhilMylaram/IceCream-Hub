@@ -27,8 +27,8 @@ spec:
       containers:
         - name: auth-service
           # Image needs to be substituted with real registry path in production
-          image: icecream-auth:latest
-          imagePullPolicy: IfNotPresent
+          image: akhilmylaram/icecream-auth:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8081
           env:

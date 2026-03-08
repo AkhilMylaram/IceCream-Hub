@@ -26,8 +26,8 @@ spec:
     spec:
       containers:
         - name: product-service
-          image: icecream-product:latest
-          imagePullPolicy: IfNotPresent
+          image: akhilmylaram/icecream-product:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8082
           env:

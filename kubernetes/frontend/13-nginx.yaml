@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: icecream-nginx:latest
-          imagePullPolicy: IfNotPresent
+          image: akhilmylaram/icecream-nginx:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80

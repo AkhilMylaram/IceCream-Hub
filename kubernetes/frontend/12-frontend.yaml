@@ -26,8 +26,8 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: icecream-frontend:latest
-          imagePullPolicy: IfNotPresent
+          image: akhilmylaram/icecream-frontend:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
           env:

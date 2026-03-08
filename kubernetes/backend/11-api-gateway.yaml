@@ -26,8 +26,8 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: icecream-gateway:latest
-          imagePullPolicy: IfNotPresent
+          image: akhilmylaram/icecream-gateway:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
