@@ -19,7 +19,9 @@ export const fetchRecommendations = async () => {
 };
 
 export const fetchCart = async (userId: string) => {
-  const res = await fetch(`${getBase()}/api/cart/${userId}`);
+  const res = await fetch(`${getBase()}/api/cart/${userId}`, {
+    cache: 'no-store'
+  });
   if (!res.ok) return { items: [] };
   return res.json();
 };
@@ -56,7 +58,9 @@ export const loginUser = async (email: string, password: string) => {
 };
 
 export const fetchOrders = async (userId: string) => {
-  const res = await fetch(`${getBase()}/api/orders/user/${userId}`);
+  const res = await fetch(`${getBase()}/api/orders/user/${userId}`, {
+    cache: 'no-store'
+  });
   if (!res.ok) return [];
   return res.json();
 };

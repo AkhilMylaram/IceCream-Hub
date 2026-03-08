@@ -63,7 +63,7 @@ export default function OrdersPage() {
               <div className="bg-white/5 px-6 py-4 flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b border-white/10">
                 <div>
                   <div className="text-sm text-gray-400 mb-1">Order #{order.id}</div>
-                  <div className="font-medium text-white">Date: {new Date().toLocaleDateString()} {/* Replace with actual date if API provides it */}</div>
+                  <div className="font-medium text-white">Date: {new Date(order.createdAt).toLocaleString()}</div>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="text-right">
@@ -87,7 +87,7 @@ export default function OrdersPage() {
                           🍨
                         </div>
                         <div>
-                          <p className="font-medium text-white group-hover:text-brand-300 transition-colors">Premium Ice Cream</p>
+                          <p className="font-medium text-white group-hover:text-brand-300 transition-colors">{item.productName || 'Premium Ice Cream'}</p>
                           <p className="text-xs text-gray-500">Product ID: {item.productId}</p>
                         </div>
                       </div>

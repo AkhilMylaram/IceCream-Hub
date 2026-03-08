@@ -1,9 +1,74 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { Sparkles, ArrowRight, ShieldCheck, Leaf, Star, ChevronDown, PlayCircle } from 'lucide-react';
+import { Sparkles, ArrowRight, ShieldCheck, Leaf, Star, ChevronDown, PlayCircle, MousePointerClick } from 'lucide-react';
+
+const HeroAnimation = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
+  const frameIndexRef = useRef(0);
+  const totalFrames = 80;
+
+  useEffect(() => {
+    imagesRef.current = [];
+    for (let i = 0; i < totalFrames; i++) {
+        const img = new Image();
+        const padded = i.toString().padStart(3, '0');
+        img.src = `/assets/vio-icecream-video/White_cream_with_colorful_toppings_delpmaspu__${padded}.jpg`;
+        img.decoding = 'async';
+        imagesRef.current.push(img);
+    }
+
+    let animationFrameId: number;
+    let lastTime = 0;
+    const fps = 15; 
+    const interval = 1000 / fps;
+
+    const render = (time: number) => {
+      animationFrameId = requestAnimationFrame(render);
+      if (!lastTime) lastTime = time;
+      const deltaTime = time - lastTime;
+      
+      if (deltaTime >= interval) {
+        lastTime = time - (deltaTime % interval);
+        const canvas = canvasRef.current;
+        const ctx = canvas?.getContext('2d');
+        
+        if (canvas && ctx) {
+          const img = imagesRef.current[frameIndexRef.current];
+          if (img && img.complete && img.naturalWidth) {
+            const cw = canvas.width;
+            const ch = canvas.height;
+            const iw = img.naturalWidth;
+            const ih = img.naturalHeight;
+            const r = Math.max(cw / iw, ch / ih);
+            const w = iw * r;
+            const h = ih * r;
+            const x = (cw - w) / 2;
+            const y = (ch - h) / 2;
+            ctx.drawImage(img, x, y, w, h);
+          }
+          frameIndexRef.current = (frameIndexRef.current + 1) % totalFrames;
+        }
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(render);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, []);
+
+  return (
+    <canvas 
+      ref={canvasRef} 
+      className="absolute inset-0 w-full h-full object-cover z-0"
+      width={1920}
+      height={1080}
+    />
+  );
+};
 
 export default function Home() {
   const router = useRouter();
@@ -78,10 +143,7 @@ export default function Home() {
       <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
         {/* Parallax Background */}
         <motion.div style={{ opacity: heroOpacity, y: heroY, scale: heroScale }} className="absolute inset-0 z-0">
-          <div 
-            className="absolute inset-0 w-full h-full bg-cover bg-center object-cover"
-            style={{ backgroundImage: 'url("/images/floating_ice_cream_hero_new.png")' }}
-          />
+          <HeroAnimation />
           {/* Gradients to blend into dark bg — keep light so image is clearly visible */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#020205]/20 via-transparent to-[#020205]"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-[#020205] via-transparent to-transparent"></div>
@@ -287,8 +349,11 @@ export default function Home() {
               Our full menu remains hidden from the public eye. Authenticate your identity to order the universe&apos;s most coveted ice cream.
             </p>
             
-            <Link href="/auth" className="relative inline-flex items-center justify-center px-16 py-6 font-black tracking-widest text-white rounded-full bg-white text-black hover:bg-pink-500 hover:text-white transition-all duration-500 hover:scale-105 active:scale-95 text-lg uppercase shadow-[0_0_0_rgba(236,72,153,0)] hover:shadow-[0_0_50px_rgba(236,72,153,0.6)]">
-              Authenticate
+            <Link href="/auth" className="group relative inline-flex items-center justify-center min-w-[280px] px-10 py-6 font-black tracking-widest rounded-full bg-white hover:bg-pink-500 transition-all duration-500 hover:scale-105 active:scale-95 text-lg shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_50px_rgba(236,72,153,0.6)]">
+              <span className="absolute inset-0 flex items-center justify-center gap-2 text-gray-500 group-hover:opacity-0 transition-all duration-500 text-xs sm:text-[11px] uppercase tracking-[0.1em] font-bold animate-pulse w-full text-center px-4">
+                <MousePointerClick className="w-5 h-5 flex-shrink-0" /> Point your mouse or finger there
+              </span>
+              <span className="opacity-0 group-hover:opacity-100 transition-all duration-500 text-white uppercase">Authenticate</span>
             </Link>
           </div>
         </motion.div>
