@@ -66,7 +66,7 @@ export default function ProductsPage() {
   const displayName = user?.name || user?.username || (user?.email ? user.email.split('@')[0] : 'Artisan');
 
   return (
-    <div className="min-h-screen bg-[#020205] text-white pt-16 sm:pt-20 pb-12 selection:bg-brand-500/30">
+    <div className="min-h-screen bg-[#020205] text-white pb-12 selection:bg-brand-500/30">
       
       {/* BACKGROUND DECOR */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-[-1]">
@@ -74,8 +74,23 @@ export default function ProductsPage() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/5 blur-[120px] rounded-full" />
       </div>
 
-      <div className="container py-4 sm:py-8">
+      <div className="container pt-2 sm:pt-4 pb-4 sm:pb-8">
         
+        {/* HERO BANNER GRAPHIC */}
+        <div className="relative w-full h-16 sm:h-20 lg:h-24 rounded-xl sm:rounded-2xl overflow-hidden mb-4 sm:mb-6 border border-white/10 shadow-3xl group flex items-center justify-center bg-[#06060c]">
+          <img 
+            src="/images/icecream_banner.png" 
+            alt="The Vault Artifacts" 
+            className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 group-hover:opacity-90 transition-all duration-[2000ms] ease-out" 
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#020205] via-transparent to-transparent pointer-events-none"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-500/10 via-transparent to-purple-500/10 mix-blend-overlay pointer-events-none"></div>
+          
+          <div className="relative z-10 text-center opacity-0 transform translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-700 pointer-events-none">
+            <div className="text-[10px] sm:text-xs font-black uppercase tracking-[0.4em] text-white/80">Cryogenic Archives</div>
+          </div>
+        </div>
+
         {/* HERO HEADER */}
         <header className="py-2 sm:py-4 space-y-2 sm:space-y-4">
           <motion.div 

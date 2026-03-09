@@ -4,10 +4,12 @@ metadata:
   name: nginx
   namespace: icecream-hub
 spec:
-  type: LoadBalancer # Typical for external ingress in simple setups
+  type: NodePort # Typical for external ingress in simple setups
   ports:
     - port: 80
       targetPort: 80
+      nodePort: 30001
+      protocol: TCP
   selector:
     app: nginx
 ---
