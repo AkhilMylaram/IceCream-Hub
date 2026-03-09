@@ -34,14 +34,14 @@ export default function CheckoutPage() {
     }
   };
 
-  if (success) {
-    return (
-      <div className="max-w-2xl mx-auto px-4 py-20 text-center">
-        <div className="glass p-12 rounded-3xl shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-b from-green-500/20 to-transparent opacity-50"></div>
-          <div className="text-7xl mb-6 relative z-10">🎉</div>
-          <h1 className="text-4xl font-bold text-white mb-4 relative z-10">Order Confirmed!</h1>
-          <p className="text-xl text-gray-300 mb-8 relative z-10">
+    if (success) {
+      return (
+        <div className="max-w-2xl mx-auto px-4 py-12 text-center">
+          <div className="glass p-8 rounded-[1.5rem] shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-b from-green-500/20 to-transparent opacity-50"></div>
+            <div className="text-5xl sm:text-7xl mb-4 sm:mb-6 relative z-10">🎉</div>
+            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3 sm:mb-4 relative z-10">Order Confirmed!</h1>
+            <p className="text-lg sm:text-xl text-gray-300 mb-6 sm:mb-8 relative z-10">
             Thank you for your purchase. Your order #{orderDetails?.id} is now processing.
           </p>
           <button onClick={() => router.push('/')} className="px-8 py-3 bg-white/10 hover:bg-white/20 rounded-full transition relative z-10">
@@ -53,15 +53,15 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold mb-8">Checkout</h1>
-      <form onSubmit={handleCheckout} className="glass p-8 rounded-2xl space-y-6">
+    <div className="max-w-2xl mx-auto px-4 py-8 sm:py-12">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6">Checkout</h1>
+      <form onSubmit={handleCheckout} className="glass p-6 sm:p-8 rounded-[1.5rem] space-y-4 sm:space-y-6">
         <div>
-          <label className="block text-sm text-gray-400 mb-2">Shipping Address</label>
-          <textarea required className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white placeholder-gray-500 focus:outline-none focus:border-brand-500 transition" rows={4} placeholder="123 IceCream Ave, Dessert City"></textarea>
+          <label className="block text-xs sm:text-sm text-gray-400 mb-1.5 sm:mb-2">Shipping Address</label>
+          <textarea required className="w-full bg-black/40 border border-white/10 rounded-xl p-3 sm:p-4 text-white placeholder-gray-500 focus:outline-none focus:border-brand-500 transition text-sm sm:text-base" rows={4} placeholder="123 IceCream Ave, Dessert City"></textarea>
         </div>
         <div>
-          <label className="block text-sm text-gray-400 mb-2">Payment Details</label>
+          <label className="block text-xs sm:text-sm text-gray-400 mb-1.5 sm:mb-2">Payment Details</label>
           <input required type="text" className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white placeholder-gray-500 focus:outline-none focus:border-brand-500 transition" placeholder="Card Number (Demo)" />
         </div>
         <button disabled={loading} type="submit" className="w-full py-4 bg-brand-600 hover:bg-brand-500 rounded-full font-bold text-lg disabled:opacity-50 transition shadow-lg shadow-brand-500/30">

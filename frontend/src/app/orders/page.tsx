@@ -35,70 +35,73 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold mb-10 text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-purple-400">
-        My Orders
-      </h1>
+    <div className="min-h-screen bg-[#020205] text-white pt-16 sm:pt-20 pb-12">
+      <div className="container py-4">
+        <header className="mb-4 sm:mb-6">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tighter uppercase">
+            Mission <span className="text-brand-500">History</span>
+          </h1>
+          <p className="text-gray-500 mt-2 font-bold tracking-widest uppercase text-[9px] sm:text-xs">Accessing your confirmed acquisitions</p>
+        </header>
 
       {error ? (
-        <div className="glass-strong border border-red-500/30 rounded-2xl p-6 text-center text-red-400">
+        <div className="bg-red-500/10 border border-red-500/50 rounded-2xl p-6 sm:p-10 text-center text-red-500 font-bold uppercase tracking-widest text-xs">
           {error}
         </div>
       ) : orders.length === 0 ? (
-        <div className="glass rounded-2xl p-16 text-center flex flex-col items-center">
-          <div className="text-6xl mb-6 opacity-80">📦</div>
-          <h2 className="text-2xl font-bold mb-3 text-white">No orders found</h2>
-          <p className="text-gray-400 mb-8 max-w-md mx-auto">
-            You haven&apos;t placed any orders yet. Explore our premium catalog and discover your next favorite flavor.
-          </p>
-          <Link href="/products" className="px-8 py-3 rounded-full bg-gradient-to-r from-brand-600 to-purple-600 hover:from-brand-500 hover:to-purple-500 text-white font-semibold transition-all">
-            Start Shopping
+        <div className="bg-white/5 border border-white/5 rounded-[1.5rem] p-8 sm:p-12 text-center flex flex-col items-center space-y-6">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/5 flex items-center justify-center text-3xl sm:text-4xl border border-white/5">📦</div>
+          <div className="space-y-2">
+             <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">No archives found</h2>
+             <p className="text-sm sm:text-base text-gray-500 font-light max-w-md mx-auto leading-relaxed">
+               You haven&apos;t placed any orders yet. Explore our premium catalog and discover your next favorite flavor.
+             </p>
+          </div>
+          <Link href="/products" className="px-8 py-3 rounded-[1rem] bg-white text-black font-black uppercase tracking-widest text-[10px] sm:text-xs hover:bg-brand-500 hover:text-white transition-all shadow-xl active:scale-95">
+            Begin Experience
           </Link>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {orders.map((order) => (
-            <div key={order.id} className="glass rounded-2xl overflow-hidden shadow-lg border border-white/5 transition-all hover:border-brand-500/20">
+            <div key={order.id} className="bg-white/5 rounded-[1rem] sm:rounded-[1.5rem] overflow-hidden border border-white/5 shadow-2xl group">
               {/* Order Header */}
-              <div className="bg-white/5 px-6 py-4 flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b border-white/10">
-                <div>
-                  <div className="text-sm text-gray-400 mb-1">Order #{order.id}</div>
-                  <div className="font-medium text-white">Date: {new Date(order.createdAt).toLocaleString()}</div>
+              <div className="bg-white/5 px-4 sm:px-6 py-4 sm:py-5 flex flex-col md:flex-row justify-between md:items-center gap-4 sm:gap-6 border-b border-white/5">
+                <div className="space-y-1">
+                  <div className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Order ID: #{order.id}</div>
+                  <div className="text-xs sm:text-sm font-bold text-white uppercase tracking-tight">{new Date(order.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className="text-right">
-                    <div className="text-sm text-gray-400 mb-1">Total Amount</div>
-                    <div className="font-bold text-lg text-brand-300">${order.totalAmount.toFixed(2)}</div>
+                <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+                  <div className="space-y-1">
+                    <div className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Investment</div>
+                    <div className="text-lg sm:text-xl font-black text-brand-400">${order.totalAmount.toFixed(2)}</div>
                   </div>
-                  <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-green-500/20 text-green-400 border border-green-500/30">
+                  <div className="px-4 py-2 rounded-[0.5rem] text-[10px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                     {order.status}
-                  </span>
+                  </div>
                 </div>
               </div>
               
               {/* Order Items */}
-              <div className="p-6">
-                <h4 className="text-sm font-semibold text-gray-300 mb-4 uppercase tracking-wider">Order Items</h4>
-                <div className="space-y-4">
+              <div className="p-4 sm:p-6 bg-[#050510]">
+                <h4 className="text-[10px] font-black text-gray-600 mb-4 sm:mb-6 uppercase tracking-widest">Manifest Contents</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   {order.items && order.items.map((item: any, idx: number) => (
-                    <div key={idx} className="flex items-center justify-between group">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-900/60 to-brand-900/60 flex items-center justify-center text-xl shadow-inner border border-white/5">
-                          🍨
-                        </div>
-                        <div>
-                          <p className="font-medium text-white group-hover:text-brand-300 transition-colors">{item.productName || 'Premium Ice Cream'}</p>
-                          <p className="text-xs text-gray-500">Product ID: {item.productId}</p>
-                        </div>
+                    <div key={idx} className="flex items-center gap-3 sm:gap-4 bg-white/5 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-white/5">
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[0.5rem] bg-[#0a0a1a] flex items-center justify-center text-xl sm:text-2xl border border-white/10 group-hover:border-brand-500/30 transition-colors">
+                        🍨
                       </div>
-                      <div className="text-right">
-                        <p className="font-medium text-gray-300">Qty: {item.quantity}</p>
-                        <p className="text-xs text-gray-500">${item.price.toFixed(2)} each</p>
+                      <div className="flex-grow">
+                        <p className="font-black text-white text-xs sm:text-sm uppercase tracking-tight mb-0.5">{item.productName || 'Premium Flavor'}</p>
+                        <div className="flex justify-between items-center">
+                           <span className="text-[10px] sm:text-xs text-brand-400 font-bold">Qty: {item.quantity}</span>
+                           <span className="text-[10px] sm:text-xs text-gray-600 font-bold tracking-widest">${item.price.toFixed(2)} / UNIT</span>
+                        </div>
                       </div>
                     </div>
                   ))}
                   {(!order.items || order.items.length === 0) && (
-                     <div className="text-gray-500 italic text-sm">Item details unavailable</div>
+                     <div className="text-gray-500 font-bold uppercase tracking-widest text-[10px]">Item details classified</div>
                   )}
                 </div>
               </div>
@@ -106,6 +109,7 @@ export default function OrdersPage() {
           ))}
         </div>
       )}
+      </div>
     </div>
   );
 }
