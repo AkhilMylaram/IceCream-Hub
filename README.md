@@ -9,7 +9,7 @@ IceCream Hub is a premium, full-stack e-commerce platform built as a **cloud-nat
 The entire platform is containerized and orchestrated via Docker Compose.
 
 ```powershell
-# Start all 11 services (8 app + 2 infra + 1 nginx)
+# Start all 12 services (8 app + 3 infra + 1 nginx)
 docker-compose up --build -d
 
 # Verify all containers are running
@@ -58,8 +58,11 @@ graph TD
     Auth --> AuthDB[(MySQL: auth_db)]
     Product --> ProductDB[(MySQL: product_db)]
     Order --> OrderDB[(MySQL: order_db)]
+    Order -->|Kafka: order-placed| Rec
     Cart --> CartCache[(Redis: cache)]
     Rec --> RecDB[(MySQL: recommendation_db)]
+    
+    Kafka((Kafka Broker)) -- event stream --> Rec
 ```
 
 ---
@@ -92,6 +95,8 @@ graph TD
 | `icecream-recommendation` | 8085 | Recommendation Service |
 | `icecream-mysql` | 3306 | Shared MySQL |
 | `icecream-redis` | 6379 | Redis Cache |
+| `icecream-kafka` | 9092 | Kafka Message Broker |
+| `icecream-kafka-ui` | **8090** | Kafka Web Interface |
 
 ---
 

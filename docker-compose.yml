@@ -33,6 +33,49 @@ services:
       timeout: 3s
       retries: 5
 
+  # Kafka Infrastructure Service
+  kafka:
+    build: ./kafka
+    container_name: icecream-kafka
+    ports:
+      - "9092:9092"
+    environment:
+      - CLUSTER_ID=Z-iuAs4ZX0CCQr9yxAZU1A
+      - KAFKA_NODE_ID=0
+      - KAFKA_PROCESS_ROLES=controller,broker
+      - KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+    restart: always
+    healthcheck:
+      test: [ "CMD", "/opt/kafka/bin/kafka-topics.sh", "--bootstrap-server", "localhost:9092", "--list" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  # Kafka UI - Visual Monitoring on http://localhost:8090
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: icecream-kafka-ui
+    ports:
+      - "8090:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+      - KAFKA_CLUSTERS_0_METRICS_PORT=9092
+      - DYNAMIC_CONFIG_ENABLED=true
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: always
+
   auth-service:
     build: ./auth-service
     container_name: icecream-auth
@@ -75,8 +118,11 @@ services:
       - CART_SERVICE_URL=http://cart-service:8084
       - PRODUCT_SERVICE_URL=http://product-service:8082
       - JAVA_TOOL_OPTIONS=-Xmx256m -Xms128m
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     depends_on:
       mysql:
+        condition: service_healthy
+      kafka:
         condition: service_healthy
       cart-service:
         condition: service_started
@@ -104,8 +150,11 @@ services:
       - "8085:8085"
     environment:
       - DATABASE_URL=mysql+pymysql://icecream_user:icecream_password@mysql:3306/recommendation_db
+      - KAFKA_HOST=kafka:9092
     depends_on:
       mysql:
+        condition: service_healthy
+      kafka:
         condition: service_healthy
     restart: always
 

@@ -11,6 +11,8 @@ resources:
   # Databases
   - databases/04-mysql.yaml
   - databases/05-redis.yaml
+  - databases/06-kafka.yaml
+  - databases/07-kafka-ui.yaml
 
   # Backend Services
   - backend/06-auth-service.yaml

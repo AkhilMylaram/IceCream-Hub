@@ -13,6 +13,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.micrometer.core.instrument.MeterRegistry;
+import org.springframework.kafka.core.KafkaTemplate;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -22,12 +24,14 @@ public class OrderService {
     private final ProductClient productClient;
     private final CartClient cartClient;
     private final MeterRegistry meterRegistry;
+    private final KafkaTemplate<String, OrderEvent> kafkaTemplate;
 
-    public OrderService(OrderRepository orderRepository, ProductClient productClient, CartClient cartClient, MeterRegistry meterRegistry) {
+    public OrderService(OrderRepository orderRepository, ProductClient productClient, CartClient cartClient, MeterRegistry meterRegistry, KafkaTemplate<String, OrderEvent> kafkaTemplate) {
         this.orderRepository = orderRepository;
         this.productClient = productClient;
         this.cartClient = cartClient;
         this.meterRegistry = meterRegistry;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @Transactional
@@ -60,6 +64,25 @@ public class OrderService {
         order.setTotalAmount(total);
         order = orderRepository.save(order);
         
+        // --- KAFKA INTEGRATION START ---
+        final Order savedOrder = order;
+        List<OrderItemEvent> itemEvents = order.getItems().stream()
+            .map(item -> new OrderItemEvent(item.getProductId(), item.getProductName(), item.getPrice(), item.getQuantity()))
+            .collect(Collectors.toList());
+        
+        OrderEvent orderEvent = new OrderEvent(savedOrder.getId(), savedOrder.getUserId(), savedOrder.getTotalAmount(), itemEvents);
+        
+        log.info("Emitting Kafka Order Event: {}", orderEvent);
+        kafkaTemplate.send("order-placed", orderEvent.orderId().toString(), orderEvent)
+            .whenComplete((result, ex) -> {
+                if (ex == null) {
+                    log.info("Kafka Event sent successfully for order: {}", orderEvent.orderId());
+                } else {
+                    log.error("Failed to send Kafka Event for order: {}", orderEvent.orderId(), ex);
+                }
+            });
+        // --- KAFKA_INTEGRATION_END ---
+
         cartClient.clearCart(userId);
         
         meterRegistry.counter("orders_created_total").increment();

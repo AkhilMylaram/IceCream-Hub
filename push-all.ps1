@@ -6,7 +6,8 @@ $apps = @(
     @{ Name="recommendation-service"; ImageName="icecream-recommendation" },
     @{ Name="api-gateway"; ImageName="icecream-gateway" },
     @{ Name="frontend"; ImageName="icecream-frontend" },
-    @{ Name="nginx"; ImageName="icecream-nginx" }
+    @{ Name="nginx"; ImageName="icecream-nginx" },
+    @{ Name="kafka"; ImageName="icecream-kafka" }
 )
 
 Write-Host "Building and pushing all microservices to Docker Hub (namespace: akhilmylaram)..."

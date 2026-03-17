@@ -30,5 +30,18 @@ def get_popular_recommendations():
 def get_personalized_recommendations(user_id: int):
     return [RecommendationResponse(product_id=4, reason=f"Recommended for user {user_id}")]
     
+    
 def get_related_recommendations(product_id: int):
     return [RecommendationResponse(product_id=product_id+1, reason=f"Related to product {product_id}")]
+
+def record_purchase(product_id: int, quantity: int):
+    logger.info(f"Recording purchase for product {product_id}, quantity {quantity}")
+    with engine.begin() as conn:
+        conn.execute(
+            text("""
+                INSERT INTO product_stats (product_id, purchases) 
+                VALUES (:pid, :qty) 
+                ON DUPLICATE KEY UPDATE purchases = purchases + :qty
+            """),
+            {"pid": product_id, "qty": quantity}
+        )

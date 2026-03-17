@@ -30,7 +30,9 @@ graph TD
     Auth --> AuthDB[(MySQL: auth_db)]
     Product --> ProductDB[(MySQL: product_db)]
     Order --> OrderDB[(MySQL: order_db)]
+    Order -->|Kafka: order-placed| KafkaBroker((Kafka Message Broker))
     Cart --> CartCache[(Redis: cache)]
+    KafkaBroker -->|Event Consume| Rec
     Rec --> RecDB[(MySQL: recommendation_db)]
 ```
 
@@ -39,6 +41,11 @@ graph TD
 ## 🚀 AWS & Cloud Compatibility Highlights
 
 To ensure high availability and seamless deployment on AWS (EC2/ECS), we have implemented the following architectural hardening:
+
+### Event-Driven Architecture (Kafka)
+- **Component**: `order-service`, `recommendation-service`.
+- **Logic**: `order-service` now publishes `order-placed` events to a Kafka Message Broker. `recommendation-service` consumes these events to update user recommendation models in real-time.
+- **Benefit**: Decoupled services, improved scalability, and real-time data processing for recommendations.
 
 ### 1. Automated Lifecycle & Seeding
 - **Component**: `product-service` & `auth-service`.

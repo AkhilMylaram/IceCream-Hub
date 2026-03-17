@@ -79,6 +79,7 @@ Browser (port 80)
 8. **Checkout (`/checkout`)**: Calls `POST /api/orders` with `{ userId }`. The Order Service:
    - Validates items via a **Feign Client** call to Product Service.
    - Persists the order in `order_db`.
+   - **Kafka Event**: Emits an `OrderEvent` to the `order-placed` topic.
    - Automatically calls `DELETE /api/cart/{userId}` to clear the session cart.
 
 9. **Order History (`/orders`)**: Accessible via the **Profile Dropdown** in the Navbar.
@@ -178,6 +179,7 @@ Browser (port 80)
 | Method | Endpoint | Auth Required | Description |
 |---|---|---|---|
 | `GET` | `/api/recommendations/popular` | ❌ | Fetch trending products based on order-history analytics. |
+| `Kafka` | `order-placed` (Consumer) | ❌ | Listens for new orders to update product popularity stats. |
 
 **Response shape:**
 ```json
