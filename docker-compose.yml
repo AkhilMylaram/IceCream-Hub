@@ -10,7 +10,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./init-scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./infrastructure/docker/init-scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword" ]
@@ -35,7 +35,7 @@ services:
 
   # Kafka Infrastructure Service
   kafka:
-    build: ./kafka
+    build: ./infrastructure/docker/kafka
     container_name: icecream-kafka
     ports:
       - "9092:9092"
@@ -77,7 +77,7 @@ services:
     restart: always
 
   auth-service:
-    build: ./auth-service
+    build: ./services/auth-service
     container_name: icecream-auth
     ports:
       - "8081:8081"
@@ -92,7 +92,7 @@ services:
     restart: always
 
   product-service:
-    build: ./product-service
+    build: ./services/product-service
     container_name: icecream-product
     ports:
       - "8082:8082"
@@ -107,7 +107,7 @@ services:
     restart: always
 
   order-service:
-    build: ./order-service
+    build: ./services/order-service
     container_name: icecream-order
     ports:
       - "8083:8083"
@@ -131,7 +131,7 @@ services:
     restart: always
 
   cart-service:
-    build: ./cart-service
+    build: ./services/cart-service
     container_name: icecream-cart
     ports:
       - "8084:8084"
@@ -144,7 +144,7 @@ services:
     restart: always
 
   recommendation-service:
-    build: ./recommendation-service
+    build: ./services/recommendation-service
     container_name: icecream-recommendation
     ports:
       - "8085:8085"
@@ -159,7 +159,7 @@ services:
     restart: always
 
   api-gateway:
-    build: ./api-gateway
+    build: ./services/api-gateway
     container_name: icecream-gateway
     ports:
       - "8080:8080"
@@ -194,7 +194,7 @@ services:
   #   /images/*         → frontend:3000      (cached AI-generated images)
   #   /                 → frontend:3000      (Next.js SSR pages)
   nginx:
-    build: ./nginx
+    build: ./infrastructure/docker/nginx
     container_name: icecream-nginx
     ports:
       - "80:80"

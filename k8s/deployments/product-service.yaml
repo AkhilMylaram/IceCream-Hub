@@ -1,28 +1,17 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: order-service
-  namespace: icecream-hub
-spec:
-  ports:
-    - port: 8083
-  selector:
-    app: order-service
----
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: order-service
+  name: product-service
   namespace: icecream-hub
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: order-service
+      app: product-service
   template:
     metadata:
       labels:
-        app: order-service
+        app: product-service
     spec:
       initContainers:
         - name: wait-for-mysql
@@ -35,27 +24,27 @@ spec:
                   key: MYSQL_PASSWORD
           command: ['sh', '-c', 'until mysql -h mysql -u icecream_user -e "SELECT 1"; do sleep 2; done']
       containers:
-        - name: order-service
-          image: akhilmylaram/icecream-order:latest
+        - name: product-service
+          image: akhilmylaram/icecream-product:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 8083
+            - containerPort: 8082
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 8083
+              port: 8082
             initialDelaySeconds: 30
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 8083
+              port: 8082
             initialDelaySeconds: 20
             periodSeconds: 5
           startupProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 8083
+              port: 8082
             failureThreshold: 30
             periodSeconds: 10
           env:
@@ -63,7 +52,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: icecream-config
-                  key: SPRING_DATASOURCE_URL_ORDER
+                  key: SPRING_DATASOURCE_URL_PRODUCT
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 configMapKeyRef:
@@ -74,23 +63,9 @@ spec:
                 secretKeyRef:
                   name: icecream-secret
                   key: MYSQL_PASSWORD
-            - name: CART_SERVICE_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: icecream-config
-                  key: CART_SERVICE_URL
-            - name: PRODUCT_SERVICE_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: icecream-config
-                  key: PRODUCT_SERVICE_URL
             - name: JAVA_TOOL_OPTIONS
               valueFrom:
                 configMapKeyRef:
                   name: icecream-config
                   key: JAVA_TOOL_OPTIONS
-            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
-              valueFrom:
-                configMapKeyRef:
-                  name: icecream-config
-                  key: KAFKA_BOOTSTRAP_SERVERS
+

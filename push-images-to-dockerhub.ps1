@@ -25,15 +25,15 @@ if (-not $dockerInfo) {
 }
 
 $apps = @(
-    @{ Name="auth-service"; ImageName="icecream-auth" },
-    @{ Name="product-service"; ImageName="icecream-product" },
-    @{ Name="order-service"; ImageName="icecream-order" },
-    @{ Name="cart-service"; ImageName="icecream-cart" },
-    @{ Name="recommendation-service"; ImageName="icecream-recommendation" },
-    @{ Name="api-gateway"; ImageName="icecream-gateway" },
+    @{ Name="services/auth-service"; ImageName="icecream-auth" },
+    @{ Name="services/product-service"; ImageName="icecream-product" },
+    @{ Name="services/order-service"; ImageName="icecream-order" },
+    @{ Name="services/cart-service"; ImageName="icecream-cart" },
+    @{ Name="services/recommendation-service"; ImageName="icecream-recommendation" },
+    @{ Name="services/api-gateway"; ImageName="icecream-gateway" },
     @{ Name="frontend"; ImageName="icecream-frontend" },
-    @{ Name="nginx"; ImageName="icecream-nginx" },
-    @{ Name="kafka"; ImageName="icecream-kafka" }
+    @{ Name="infrastructure/docker/nginx"; ImageName="icecream-nginx" },
+    @{ Name="infrastructure/docker/kafka"; ImageName="icecream-kafka" }
 )
 
 Write-Host ""
