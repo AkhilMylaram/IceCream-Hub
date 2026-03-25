@@ -143,6 +143,11 @@ export default function Home() {
               <Sparkles className="w-3 h-3 text-pink-400" />
               The New Standard of Dessert
             </div>
+
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[9px] sm:text-[10px] font-black tracking-widest uppercase animate-pulse">
+              <div className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></div>
+              GitHub Actions Running
+            </div>
             
             <h1 className="text-fluid-h1 font-black tracking-tighter text-white">
               Taste <br className="hidden sm:block" />

@@ -32,9 +32,9 @@ jobs:
         with:
           context: services/cart-service
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/icecream-cart-service:${{ github.sha }}
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/icecream-cart-service:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/icecream-cart-service:buildcache,mode=max
+          tags: akhilmylaram/icecream-cart-service:${{ github.sha }}
+          cache-from: type=registry,ref=akhilmylaram/icecream-cart-service:buildcache
+          cache-to: type=registry,ref=akhilmylaram/icecream-cart-service:buildcache,mode=max
 
       - name: Install yq
         uses: mikefarah/yq@master
@@ -42,7 +42,7 @@ jobs:
       - name: Update Helm values.yaml
         run: |
           yq e ".cartService.tag = \"${{ github.sha }}\"" -i helm/icecream/values.yaml
-          yq e ".cartService.image = \"${{ secrets.DOCKER_USERNAME }}/icecream-cart-service\"" -i helm/icecream/values.yaml
+          yq e ".cartService.image = \"akhilmylaram/icecream-cart-service\"" -i helm/icecream/values.yaml
 
       - name: Commit and Push changes
         run: |

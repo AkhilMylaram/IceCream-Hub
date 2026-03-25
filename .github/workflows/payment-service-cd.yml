@@ -32,9 +32,9 @@ jobs:
         with:
           context: services/payment-service
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/icecream-payment-service:${{ github.sha }}
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/icecream-payment-service:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/icecream-payment-service:buildcache,mode=max
+          tags: akhilmylaram/icecream-payment-service:${{ github.sha }}
+          cache-from: type=registry,ref=akhilmylaram/icecream-payment-service:buildcache
+          cache-to: type=registry,ref=akhilmylaram/icecream-payment-service:buildcache,mode=max
 
       - name: Install yq
         uses: mikefarah/yq@master
@@ -42,7 +42,7 @@ jobs:
       - name: Update Helm values.yaml
         run: |
           yq e ".paymentService.tag = \"${{ github.sha }}\"" -i helm/icecream/values.yaml
-          yq e ".paymentService.image = \"${{ secrets.DOCKER_USERNAME }}/icecream-payment-service\"" -i helm/icecream/values.yaml
+          yq e ".paymentService.image = \"akhilmylaram/icecream-payment-service\"" -i helm/icecream/values.yaml
 
       - name: Commit and Push changes
         run: |

@@ -32,9 +32,9 @@ jobs:
         with:
           context: services/order-service
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/icecream-order-service:${{ github.sha }}
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/icecream-order-service:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/icecream-order-service:buildcache,mode=max
+          tags: akhilmylaram/icecream-order-service:${{ github.sha }}
+          cache-from: type=registry,ref=akhilmylaram/icecream-order-service:buildcache
+          cache-to: type=registry,ref=akhilmylaram/icecream-order-service:buildcache,mode=max
 
       - name: Install yq
         uses: mikefarah/yq@master
@@ -42,7 +42,7 @@ jobs:
       - name: Update Helm values.yaml
         run: |
           yq e ".orderService.tag = \"${{ github.sha }}\"" -i helm/icecream/values.yaml
-          yq e ".orderService.image = \"${{ secrets.DOCKER_USERNAME }}/icecream-order-service\"" -i helm/icecream/values.yaml
+          yq e ".orderService.image = \"akhilmylaram/icecream-order-service\"" -i helm/icecream/values.yaml
 
       - name: Commit and Push changes
         run: |

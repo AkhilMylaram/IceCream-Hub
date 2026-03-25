@@ -32,9 +32,9 @@ jobs:
         with:
           context: frontend
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/icecream-frontend:${{ github.sha }}
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/icecream-frontend:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/icecream-frontend:buildcache,mode=max
+          tags: akhilmylaram/icecream-frontend:${{ github.sha }}
+          cache-from: type=registry,ref=akhilmylaram/icecream-frontend:buildcache
+          cache-to: type=registry,ref=akhilmylaram/icecream-frontend:buildcache,mode=max
 
       - name: Install yq
         uses: mikefarah/yq@master
@@ -42,7 +42,7 @@ jobs:
       - name: Update Helm values.yaml
         run: |
           yq e ".frontend.tag = \"${{ github.sha }}\"" -i helm/icecream/values.yaml
-          yq e ".frontend.image = \"${{ secrets.DOCKER_USERNAME }}/icecream-frontend\"" -i helm/icecream/values.yaml
+          yq e ".frontend.image = \"akhilmylaram/icecream-frontend\"" -i helm/icecream/values.yaml
 
       - name: Commit and Push changes
         run: |

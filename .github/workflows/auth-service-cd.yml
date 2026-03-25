@@ -32,9 +32,9 @@ jobs:
         with:
           context: services/auth-service
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/icecream-auth-service:${{ github.sha }}
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/icecream-auth-service:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/icecream-auth-service:buildcache,mode=max
+          tags: akhilmylaram/icecream-auth-service:${{ github.sha }}
+          cache-from: type=registry,ref=akhilmylaram/icecream-auth-service:buildcache
+          cache-to: type=registry,ref=akhilmylaram/icecream-auth-service:buildcache,mode=max
 
       - name: Install yq
         uses: mikefarah/yq@master
@@ -42,7 +42,7 @@ jobs:
       - name: Update Helm values.yaml
         run: |
           yq e ".authService.tag = \"${{ github.sha }}\"" -i helm/icecream/values.yaml
-          yq e ".authService.image = \"${{ secrets.DOCKER_USERNAME }}/icecream-auth-service\"" -i helm/icecream/values.yaml
+          yq e ".authService.image = \"akhilmylaram/icecream-auth-service\"" -i helm/icecream/values.yaml
 
       - name: Commit and Push changes
         run: |
