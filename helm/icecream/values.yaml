@@ -3,36 +3,27 @@
 apiGateway:
   image: "akhilmylaram/icecream-gateway"
   tag: "latest"
-
 authService:
   image: "akhilmylaram/icecream-auth"
   tag: "latest"
-
 cartService:
   image: "akhilmylaram/icecream-cart"
   tag: "latest"
-
 frontend:
   image: "akhilmylaram/icecream-frontend"
-  tag: "latest"
-
+  tag: "6fac34d60cc15269b1126e5aee8721a32a5d73d4"
 kafka:
   image: "akhilmylaram/icecream-kafka"
   tag: "latest"
-
 nginx:
   image: "akhilmylaram/icecream-nginx"
   tag: "latest"
-
 orderService:
   image: "akhilmylaram/icecream-order"
   tag: "latest"
-
 productService:
   image: "akhilmylaram/icecream-product"
   tag: "latest"
-
 recommendationService:
   image: "akhilmylaram/icecream-recommendation"
   tag: "latest"
-
