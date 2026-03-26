@@ -33,17 +33,21 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Setup Gradle Environment
+      - name: Build and Test
         working-directory: services/auth-service
-        run: chmod +x gradlew
+        run: |
+          if [ -f "gradlew" ]; then
+            chmod +x gradlew
+            ./gradlew build
+          elif [ -f "pom.xml" ]; then
+            mvn clean test
+          elif [ -f "package.json" ]; then
+            npm ci
+            npm test
+          else
+            echo "No build file found"
+          fi
 
-      - name: Compile Code & Assemble Target
-        working-directory: services/auth-service
-        run: ./gradlew assemble
-
-      - name: Execute Unit Tests
-        working-directory: services/auth-service
-        run: ./gradlew test
       - name: Run Trivy vulnerability scanner in fs mode
         uses: aquasecurity/trivy-action@master
         with:

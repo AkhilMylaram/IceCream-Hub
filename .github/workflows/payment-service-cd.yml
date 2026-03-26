@@ -39,22 +39,15 @@ jobs:
       - name: Install yq
         uses: mikefarah/yq@master
 
-      - name: Update Helm Tag in values.yaml
-        run: yq e ".paymentService.tag = \"${{ github.sha }}\"" -i helm/icecream/values.yaml
+      - name: Update Helm values.yaml
+        run: |
+          yq e ".paymentService.tag = \"${{ github.sha }}\"" -i helm/icecream/values.yaml
+          yq e ".paymentService.image = \"akhilmylaram/icecream-payment-service\"" -i helm/icecream/values.yaml
 
-      - name: Update Helm Image in values.yaml
-        run: yq e ".paymentService.image = \"akhilmylaram/icecream-payment-service\"" -i helm/icecream/values.yaml
-
-      - name: Configure Git Bot
+      - name: Commit and Push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Stage Manifest Changes
-        run: git add helm/icecream/values.yaml
-
-      - name: Commit Manifest Changes
-        run: git commit -m "chore: update payment-service image to ${{ github.sha }} [skip ci]"
-
-      - name: Push Changes to Remote
-        run: git push origin HEAD:${{ github.ref }}
+          git add helm/icecream/values.yaml
+          git commit -m "chore: update payment-service image to ${{ github.sha }} [skip ci]"
+          git push origin HEAD:${{ github.ref }}
