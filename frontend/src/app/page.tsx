@@ -144,10 +144,10 @@ export default function Home() {
               The New Standard of Dessert
             </div>
 
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-gradient-to-r from-purple-600/30 to-fuchsia-600/30 border border-fuchsia-400/60 text-fuchsia-200 text-[10px] sm:text-[11px] font-black tracking-[0.2em] uppercase shadow-[0_0_30px_rgba(217,70,239,0.5)] drop-shadow-[0_0_15px_rgba(217,70,239,1)] backdrop-blur-xl animate-pulse transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(217,70,239,0.7)]">
+            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-purple-900/60 border-2 border-purple-400/80 text-purple-100 text-[11px] sm:text-[12px] font-black tracking-[0.25em] uppercase shadow-[0_0_40px_rgba(168,85,247,0.8),inset_0_0_20px_rgba(168,85,247,0.5)] drop-shadow-[0_0_20px_rgba(168,85,247,1)] backdrop-blur-xl animate-pulse transition-all duration-300 hover:scale-110 hover:shadow-[0_0_60px_rgba(168,85,247,1),inset_0_0_30px_rgba(168,85,247,0.8)]">
               <div className="relative flex items-center justify-center">
-                <div className="w-3 h-3 rounded-full bg-fuchsia-400 shadow-[0_0_20px_#e879f9] animate-ping absolute opacity-100"></div>
-                <div className="w-3 h-3 rounded-full bg-fuchsia-300 shadow-[0_0_15px_#f0abfc] relative z-10"></div>
+                <div className="w-4 h-4 rounded-full bg-purple-400 shadow-[0_0_30px_#c084fc] animate-ping absolute opacity-100"></div>
+                <div className="w-3.5 h-3.5 rounded-full bg-purple-300 shadow-[0_0_20px_#d8b4fe] relative z-10"></div>
               </div>
               GitHub Actions Running
             </div>
