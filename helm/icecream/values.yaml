@@ -7,8 +7,8 @@ authService:
   image: "akhilmylaram/icecream-auth"
   tag: "latest"
 cartService:
-  image: "akhilmylaram/icecream-cart"
-  tag: "latest"
+  image: "akhilmylaram/icecream-cart-service"
+  tag: "cdaea58455265867ef3baba71b141c23b3c97252"
 frontend:
   image: "akhilmylaram/icecream-frontend"
   tag: "1aa24e6301a065def6f90248459146e790139051"
