@@ -2,6 +2,11 @@
 name: PAYMENT SERVICE CI
 
 on:
+  push:
+    branches:
+      - 'feature/*'
+    paths:
+      - 'services/payment-service/**'
   pull_request:
     branches:
       - main

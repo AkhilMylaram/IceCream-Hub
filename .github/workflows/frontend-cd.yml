@@ -9,6 +9,10 @@ on:
       - 'frontend/**'
       - 'helm/icecream/**'
 
+concurrency:
+  group: cd-pipeline
+  cancel-in-progress: false
+
 jobs:
   build-push-and-update-manifest:
     name: Build, Push and Update values.yaml (GitOps)

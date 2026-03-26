@@ -2,6 +2,11 @@
 name: CART SERVICE CI
 
 on:
+  push:
+    branches:
+      - 'feature/*'
+    paths:
+      - 'services/cart-service/**'
   pull_request:
     branches:
       - main
