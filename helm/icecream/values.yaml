@@ -11,7 +11,7 @@ cartService:
   tag: "latest"
 frontend:
   image: "akhilmylaram/icecream-frontend"
-  tag: "6fac34d60cc15269b1126e5aee8721a32a5d73d4"
+  tag: "1aa24e6301a065def6f90248459146e790139051"
 kafka:
   image: "akhilmylaram/icecream-kafka"
   tag: "latest"
