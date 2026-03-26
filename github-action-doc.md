@@ -9,15 +9,15 @@ Welcome to the visual guide for the IceCream-Hub automated deployment process. O
 
 ![CI Flow Diagram](C:\Users\LENOVO\.gemini\antigravity\brain\8b0b9fcc-9664-4215-a832-5aea634e16be\ci_flow_diagram_1774428444115.png)
 
-### How the CI Flow Works:
-1. **Developer Branch:** You write code in a feature branch (`feature/new-button`) and push it to GitHub.
-2. **Pull Request (PR):** You propose to merge this code into the `main` branch.
-3. **Automated Verification:** 
-   - The CI Pipeline automatically intercepts the pull request.
-   - It checks out your code and sets up the correct language runtime (Node.js/TypeScript or Java17).
-   - It runs compiling & linting to ensure there are no syntax errors (`npm build` or `gradlew build`).
-   - Finally, a **Trivy security scanner** analyzes the Docker image and dependencies for vulnerabilities.
-4. **Merge Decision:** If the automated checks succeed, the pull request gets a "Green Checkmark" ✅ and the team can safely merge it into `main`.
+### Clean, Step-by-Step Execution
+When a developer opens a Pull Request against the `main` branch, the CI pipeline automatically runs. In the GitHub Actions UI, you will see a clear, linear progress checklist ensuring maximum transparency:
+
+✅ **Setup Node.js / Gradle Environment**
+✅ **Install dependencies / Compile Code & Assemble Target** 
+✅ **Run linting / Execute Unit Tests**
+✅ **Run Trivy vulnerability scanner**
+
+If any step fails, it turns red instantly so you know exactly what is wrong. If everything is green ✅, the PR is allowed to merge.
 
 ---
 
@@ -26,17 +26,22 @@ Welcome to the visual guide for the IceCream-Hub automated deployment process. O
 
 ![CD Flow Diagram](C:\Users\LENOVO\.gemini\antigravity\brain\8b0b9fcc-9664-4215-a832-5aea634e16be\cd_flow_diagram_1774428458235.png)
 
-### How the CD Flow Works:
-1. **Merge to Main:** The code is merged from the PR directly into the `main` branch.
-2. **Containerization:** 
-   - The CD pipeline detects the merge and begins the *Build and Push* process.
-   - It builds the code into a pristine, isolated Docker container.
-   - The container is tagged with your unique Git Commit ID (`${{ github.sha }}`).
-3. **Docker Hub Upload:** The image is uploaded to your container registry (`akhilmylaram/<service>`).
-4. **GitOps Manifest Update:** 
-   - Rather than forcing the cloud to run the image, our bot automatically modifies the central blueprints—the **Helm configuration file** (`helm/icecream/values.yaml`).
-   - The bot injects the new image tag into the file and commits this change back to the repository.
-5. **Deployment:** Systems listening to your central Kubernetes Helm configuration read this update and seamlessly spin up the new version of your IceCream-Hub backend or frontend!
+### GitOps Trigger and Execution
+When code is merged to the `main` branch, the CD process triggers automatically. Like CI, the CD steps are separated for a crystal-clear visual breakdown in the GitHub UI:
+
+1. **Docker Containerization** 
+   - ✅ **Build Docker Image**
+   - ✅ **Push Docker Image** to `akhilmylaram/<service>` tagged with the Git commit hash (`${{ github.sha }}`).
+2. **GitOps Helm Update** (Our bot opens the central deployment configuration and updates the blueprints)
+   - ✅ **Update Helm Tag in values.yaml**
+   - ✅ **Update Helm Image in values.yaml**
+3. **Commit & Push**
+   - ✅ **Configure Git Bot**
+   - ✅ **Stage Manifest Changes**
+   - ✅ **Commit Manifest Changes**
+   - ✅ **Push Changes to Remote**
+
+Systems listening to your central Kubernetes Helm configuration read this updated commit from the main branch and seamlessly spin up the new version of your backend or frontend!
 
 ---
 

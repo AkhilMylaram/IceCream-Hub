@@ -1,6 +1,12 @@
+# Triggering CI/CD pipeline check
 name: AUTH SERVICE CI
 
 on:
+  push:
+    branches:
+      - 'feature/*'
+    paths:
+      - 'services/auth-service/**'
   pull_request:
     branches:
       - main

@@ -1,6 +1,12 @@
+# Triggering CI/CD pipeline check
 name: ORDER SERVICE CI
 
 on:
+  push:
+    branches:
+      - 'feature/*'
+    paths:
+      - 'services/order-service/**'
   pull_request:
     branches:
       - main

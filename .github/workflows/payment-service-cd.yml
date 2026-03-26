@@ -1,3 +1,4 @@
+# Triggering CI/CD pipeline check
 name: PAYMENT SERVICE CD
 
 on:
@@ -7,6 +8,10 @@ on:
     paths:
       - 'services/payment-service/**'
       - 'helm/icecream/**'
+
+concurrency:
+  group: cd-pipeline
+  cancel-in-progress: false
 
 jobs:
   build-push-and-update-manifest:
