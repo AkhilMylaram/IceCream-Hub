@@ -144,8 +144,11 @@ export default function Home() {
               The New Standard of Dessert
             </div>
 
-            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[9px] sm:text-[10px] font-black tracking-widest uppercase animate-pulse">
-              <div className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></div>
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-green-500/20 border border-green-400/50 text-green-300 text-[10px] sm:text-[11px] font-black tracking-[0.2em] uppercase shadow-[0_0_25px_rgba(74,222,128,0.4)] drop-shadow-[0_0_10px_rgba(74,222,128,0.8)] backdrop-blur-md animate-pulse transition-all duration-300 hover:scale-105">
+              <div className="relative flex items-center justify-center">
+                <div className="w-2.5 h-2.5 rounded-full bg-green-400 shadow-[0_0_15px_#4ade80] animate-ping absolute opacity-100"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-green-300 shadow-[0_0_12px_#86efac] relative z-10"></div>
+              </div>
               GitHub Actions Running
             </div>
             
