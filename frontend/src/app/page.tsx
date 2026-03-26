@@ -144,10 +144,10 @@ export default function Home() {
               The New Standard of Dessert
             </div>
 
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-purple-500/20 border border-fuchsia-400/50 text-fuchsia-300 text-[10px] sm:text-[11px] font-black tracking-[0.2em] uppercase shadow-[0_0_25px_rgba(217,70,239,0.4)] drop-shadow-[0_0_10px_rgba(217,70,239,0.8)] backdrop-blur-md animate-pulse transition-all duration-300 hover:scale-105">
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-gradient-to-r from-purple-600/30 to-fuchsia-600/30 border border-fuchsia-400/60 text-fuchsia-200 text-[10px] sm:text-[11px] font-black tracking-[0.2em] uppercase shadow-[0_0_30px_rgba(217,70,239,0.5)] drop-shadow-[0_0_15px_rgba(217,70,239,1)] backdrop-blur-xl animate-pulse transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(217,70,239,0.7)]">
               <div className="relative flex items-center justify-center">
-                <div className="w-2.5 h-2.5 rounded-full bg-fuchsia-400 shadow-[0_0_15px_#e879f9] animate-ping absolute opacity-100"></div>
-                <div className="w-2.5 h-2.5 rounded-full bg-fuchsia-300 shadow-[0_0_12px_#f0abfc] relative z-10"></div>
+                <div className="w-3 h-3 rounded-full bg-fuchsia-400 shadow-[0_0_20px_#e879f9] animate-ping absolute opacity-100"></div>
+                <div className="w-3 h-3 rounded-full bg-fuchsia-300 shadow-[0_0_15px_#f0abfc] relative z-10"></div>
               </div>
               GitHub Actions Running
             </div>
